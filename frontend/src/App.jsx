@@ -44,10 +44,8 @@ export default function App() {
     setStatus(prev => ({ ...prev, explaining: true, error: null }));
 
     try {
-      // Create an array of all lines
+      // FIX: Send a larger snippet of code around the selected line for better context
       const allLines = codeContent.split('\n');
-
-      // Get 3 lines before, the target line, and 3 lines after (handling file boundaries)
       const startIdx = Math.max(0, lineNumber - 4);
       const endIdx = Math.min(allLines.length, lineNumber + 3);
       const codeBlock = allLines.slice(startIdx, endIdx).join('\n');
