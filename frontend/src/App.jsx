@@ -44,12 +44,21 @@ export default function App() {
     setStatus(prev => ({ ...prev, explaining: true, error: null }));
 
     try {
-      const response = await axios.post('http://localhost:8000/api/v1/explain', {
+      // Create an array of all lines
+      const allLines = codeContent.split('\n');
+
+      // Get 3 lines before, the target line, and 3 lines after (handling file boundaries)
+      const startIdx = Math.max(0, lineNumber - 4);
+      const endIdx = Math.min(allLines.length, lineNumber + 3);
+      const codeBlock = allLines.slice(startIdx, endIdx).join('\n');
+
+      const response = await axios.post(`${import.meta.env.VITE_API_URL}/explain`, {
         ...repoParams,
         targetLine: lineNumber,
-        // Grab the exact line of code from the fetched file content
-        codeSnippet: codeContent.split('\n')[lineNumber - 1].trim()
+        // Send the larger block instead of just one line
+        codeSnippet: codeBlock
       });
+
       setExplanationData(response.data);
     } catch (err) {
       setStatus(prev => ({ ...prev, error: err.response?.data?.error || 'Failed to generate explanation.' }));
