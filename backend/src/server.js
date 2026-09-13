@@ -20,27 +20,34 @@ app.use('/api/v1/explain', explainRouter);
 // Health check endpoint
 app.get('/health', (req, res) => res.status(200).json({ status: 'ok' }));
 
+app.get('/', (req, res) => {
+  res.status(200).json({ message: 'Welcome to the GitHub Explain API' });
+});
+
 // Global Error Handler
 app.use((err, req, res, next) => {
   const statusCode = err.statusCode || err.status || 500;
   console.error(`[API ERROR ${statusCode}]: ${err.message}`);
-
   res.status(statusCode).json({
     error: err.message || 'An unexpected internal error occurred.',
   });
 });
 
-// Database connection & startup
+
 const PORT = process.env.PORT || 8000;
-const MONGO_URI = process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/github-explain';
+const MONGO_URI = process.env.MONGO_URI;
 
 mongoose
   .connect(MONGO_URI)
   .then(() => {
     console.log('Connected to MongoDB');
-    app.listen(PORT, () => console.log(`Server listening on port ${PORT}`));
+    // Only listen if not running on Vercel
+    if (process.env.NODE_ENV !== 'production') {
+      app.listen(PORT, () => console.log(`Server listening on port ${PORT}`));
+    }
   })
   .catch((err) => {
     console.error('Database connection failed:', err.message);
-    process.exit(1);
   });
+
+export default app;
