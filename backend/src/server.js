@@ -11,8 +11,14 @@ const app = express();
 
 // Security and utility middleware
 app.use(helmet());
-app.use(cors({ origin: process.env.CLIENT_URL || '*' }));
-app.use(express.json());
+app.use(cors({
+  origin: [
+    process.env.CLIENT_URL,          
+    'http://localhost:5173',        
+    'http://localhost:5174'         
+  ],
+  credentials: true
+})); app.use(express.json());
 
 // Routes
 app.use('/api/v1/explain', explainRouter);

@@ -8,7 +8,7 @@ SyntaxHighlighter.registerLanguage('typescript', ts);
 
 export default function CodeViewer({ code, onLineClick, selectedLine }) {
   return (
-    <div className="text-xs md:text-sm font-mono cursor-pointer w-full overflow-x-auto">
+    <div className="text-[10px] sm:text-xs md:text-sm font-mono cursor-pointer w-full overflow-x-auto pb-4 md:pb-0">
       <SyntaxHighlighter
         language="javascript"
         style={vs2015}
@@ -20,8 +20,8 @@ export default function CodeViewer({ code, onLineClick, selectedLine }) {
           return {
             onClick: () => onLineClick(lineNumber),
             className: `block px-2 md:px-4 transition-all duration-200 ease-in-out ${isSelected
-                ? 'bg-blue-900/40 border-l-4 border-blue-400 shadow-[inset_0_0_20px_rgba(59,130,246,0.15)]'
-                : 'border-l-4 border-transparent hover:bg-gray-800/80 hover:border-gray-600'
+              ? 'bg-blue-900/50 border-l-4 border-blue-400 shadow-[inset_0_0_15px_rgba(59,130,246,0.15)]'
+              : 'border-l-4 border-transparent active:bg-gray-700/50 hover:bg-gray-800/80'
               }`
           };
         }}
